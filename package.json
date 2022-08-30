@@ -1,0 +1,30 @@
+{
+  "name": "dev_weird_game",
+  "version": "1.0.0",
+  "description": "weird",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/trunicz/dev_weird_game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/trunicz/dev_weird_game/issues"
+  },
+  "homepage": "https://github.com/trunicz/dev_weird_game#readme",
+  "devDependencies": {
+    "eslint": "^8.23.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-promise": "^6.0.1",
+    "prettier": "^2.7.1",
+    "prettier-config-standard": "^5.0.0"
+  },
+  "prettier":"prettier-config-standard"
+}
