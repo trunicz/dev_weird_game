@@ -1,13 +1,16 @@
+const c = document.getElementById('canva')
+const ctx = c.getContext('2d')
+
 let x = 0
 let directions = []
 let y = 0
+let playerObj = {}
+const WallObj = {}
 
 const playerWidth = 20
 const playerHeight = 20
 
 function init(x, y, width, height) {
-  const c = document.getElementById('canva')
-  const ctx = c.getContext('2d')
   run(ctx, c)
   window.requestAnimationFrame(init)
 }
@@ -18,7 +21,6 @@ function run(ctx, c) {
       return x !== e.key
     })
   })
-
   document.addEventListener('keydown', (e) => {
     directions.push(e.key)
     directions = directions.filter((item, index) => {
@@ -43,10 +45,35 @@ function draw(ctx, c, directions) {
   if (x <= 0) x = 0
   if (y >= c.height - playerHeight) y = c.height - playerHeight
   if (y <= 0) y = 0
+  paintPlayer(x, y)
+  paintWall(c.width / 2, c.height / 2)
+  // console.log(x + '||' + y)
+}
 
+function paintPlayer(x, y) {
   ctx.fillStyle = '#fff'
   ctx.fillRect(x, y, playerWidth, playerHeight)
-  // console.log(x + '||' + y)
+  playerObj = {
+    x,
+    y,
+    width: playerWidth,
+    height: playerHeight
+  }
+}
+function paintWall(x, y, width = 0, height = 0) {
+  x = x - playerHeight
+  y = y - playerWidth
+  width = playerWidth * 2
+  height = playerHeight * 2
+
+  ctx.fillStyle = '#c01150'
+  ctx.fillRect(x, y, width, height)
+  playerObj = {
+    x,
+    y,
+    width,
+    height
+  }
 }
 
 init()
