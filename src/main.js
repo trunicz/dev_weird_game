@@ -1,12 +1,13 @@
 const c = document.getElementById('canva')
 const ctx = c.getContext('2d')
+const playerColor = 'rgba(10,10,100,0.5)'
 
-let x = 0
+let x = 100
 let directions = []
-let y = 0
-let playerObj = {}
-const WallObj = {}
-
+let y = 100
+// let playerObj = {}
+// const WallObj = {}
+const wallsArray = []
 const playerWidth = 20
 const playerHeight = 20
 
@@ -33,6 +34,7 @@ function run(ctx, c) {
 function draw(ctx, c, directions) {
   ctx.fillStyle = '#000'
   ctx.fillRect(x, y, c.width, c.height)
+  renderLevel(10)
 
   directions.forEach((direction) => {
     if (direction === 'w') y -= 3
@@ -51,29 +53,53 @@ function draw(ctx, c, directions) {
 }
 
 function paintPlayer(x, y) {
-  ctx.fillStyle = '#fff'
+  ctx.fillStyle = playerColor
   ctx.fillRect(x, y, playerWidth, playerHeight)
-  playerObj = {
-    x,
-    y,
-    width: playerWidth,
-    height: playerHeight
-  }
 }
-function paintWall(x, y, width = 0, height = 0) {
+
+function paintWall(
+  x,
+  y,
+  width = playerWidth * 2,
+  height = playerHeight * 2,
+  color = '#c01150'
+) {
   x = x - playerHeight
   y = y - playerWidth
-  width = playerWidth * 2
-  height = playerHeight * 2
-
-  ctx.fillStyle = '#c01150'
-  ctx.fillRect(x, y, width, height)
-  playerObj = {
-    x,
-    y,
-    width,
-    height
-  }
+  ctx.fillStyle = color
+  return ctx.fillRect(x, y, width, height)
 }
 
+function renderLevel(walls, lastX = 0, nextX = 0, lastY = 0, nextY = 0) {
+  const width = c.width / walls
+  const height = c.height / walls
+  if (nextX === 0 || lastY === 0 || nextX === 500 || lastY === 500) {
+    paintWall(nextX, nextY, width, height, 'rgb(100,150,100)')
+  } else {
+    paintWall(nextX, nextY, width, height, 'rgb(100,150,100)')
+  }
+  wallsArray.push({
+    x: nextX,
+    y: nextY,
+    width,
+    height
+  })
+  if (nextX < c.width) {
+    lastX = nextX
+    nextX = lastX + width
+  } else {
+    nextX = 0
+    nextY = lastY + height
+    lastY = nextY
+  }
+  console.log()
+  if (nextX <= c.width && nextY <= c.height) {
+    renderLevel(walls, nextX, nextX, lastY, lastY)
+  }
+}
+// function random(max) {
+//   return Math.floor(Math.random() * max) + 1
+// }
+
 init()
+console.table(wallsArray)
