@@ -18,13 +18,13 @@
   },
   "homepage": "https://github.com/trunicz/dev_weird_game#readme",
   "devDependencies": {
-    "eslint": "^8.23.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-n": "^15.2.5",
-    "eslint-plugin-promise": "^6.0.1",
-    "prettier": "^2.7.1",
-    "prettier-config-standard": "^5.0.0"
+    "eslint": "8.23.0",
+    "eslint-config-standard": "17.0.0",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-n": "15.2.5",
+    "eslint-plugin-promise": "6.0.1",
+    "prettier": "2.7.1",
+    "prettier-config-standard": "5.0.0"
   },
   "prettier":"prettier-config-standard"
 }
