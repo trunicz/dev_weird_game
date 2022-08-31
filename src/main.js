@@ -1,6 +1,7 @@
 const c = document.getElementById('canva')
 const ctx = c.getContext('2d')
-const playerColor = 'rgba(10,10,100,0.5)'
+let playerColor = 'rgba(10,10,100,0.5)'
+let isCollapse = false
 
 let x = 100
 let directions = []
@@ -10,6 +11,8 @@ let y = 100
 const wallsArray = []
 const playerWidth = 20
 const playerHeight = 20
+
+const positionPlayer = { x: 0, y: 0 }
 
 function init(x, y, width, height) {
   run(ctx, c)
@@ -32,58 +35,107 @@ function run(ctx, c) {
 }
 
 function draw(ctx, c, directions) {
-  ctx.fillStyle = '#000'
-  ctx.fillRect(x, y, c.width, c.height)
+  // ctx.fillStyle = '#000'
+  // ctx.fillRect(x, y, c.width, c.height)
   renderLevel(10)
 
   directions.forEach((direction) => {
-    if (direction === 'w') y -= 3
-    if (direction === 's') y += 3
-    if (direction === 'a') x -= 3
-    if (direction === 'd') x += 3
+    if (!isCollapse) {
+      if (direction === 'w') y -= 5
+      if (direction === 's') y += 5
+      if (direction === 'a') x -= 5
+      if (direction === 'd') x += 5
+    }
   })
 
-  if (x >= c.width - playerWidth) x = c.width - playerWidth
-  if (x <= 0) x = 0
-  if (y >= c.height - playerHeight) y = c.height - playerHeight
-  if (y <= 0) y = 0
-  paintPlayer(x, y)
-  paintWall(c.width / 2, c.height / 2)
+  if (x >= c.width - playerWidth - 20) x = c.width - playerWidth - 20
+  if (x <= 20) x = 20
+  if (y >= c.height - playerHeight - 20) y = c.height - playerHeight - 20
+  if (y <= 20) y = 20
+
+  player(x, y, playerWidth, playerHeight)
+
+  collapse(positionPlayer.x, positionPlayer.y, playerWidth, {
+    x: c.width / 2,
+    y: c.height / 2,
+    width: 40,
+    collapsible: true
+  })
+
+  paintEnemy(c.width / 2, c.height / 2)
   // console.log(x + '||' + y)
 }
 
-function paintPlayer(x, y) {
-  ctx.fillStyle = playerColor
-  ctx.fillRect(x, y, playerWidth, playerHeight)
+function player(x, y, width, height) {
+  function paintPlayer(x, y) {
+    ctx.fillStyle = playerColor
+    ctx.fillRect(x, y, playerWidth, playerHeight)
+    positionPlayer.x = x
+    positionPlayer.y = y
+  }
+
+  paintPlayer(x, y)
 }
 
-function paintWall(
+function collapse(x, y, widthP, element) {
+  if (element.collapsible) {
+    const exw = element.x + element.width
+    const eyh = element.y + element.width
+
+    const xw = x + widthP
+    const yw = y + widthP
+
+    if (
+      (element.x <= x && x <= exw && element.y <= y && y <= eyh) ||
+      (element.x <= x && x <= exw && element.y <= yw && yw <= eyh) ||
+      (element.x <= xw && xw <= exw && element.y <= y && y <= eyh) ||
+      (element.x <= xw && xw <= exw && element.y <= yw && yw <= eyh)
+    ) {
+      isCollapse = true
+      playerColor = 'rgba(100,10,10,0.5)'
+      return true
+    } else {
+      isCollapse = false
+      playerColor = 'rgba(10,10,100,0.5)'
+      return false
+    }
+  }
+}
+
+function paintEnemy(
   x,
   y,
   width = playerWidth * 2,
   height = playerHeight * 2,
-  color = '#c01150'
+  color = 'rgba(150,60,60,.5)',
+  collapsible = true
 ) {
-  x = x - playerHeight
-  y = y - playerWidth
   ctx.fillStyle = color
-  return ctx.fillRect(x, y, width, height)
+  ctx.fillRect(x, y, width, height)
+  return ctx
 }
 
 function renderLevel(walls, lastX = 0, nextX = 0, lastY = 0, nextY = 0) {
-  const width = c.width / walls
-  const height = c.height / walls
-  if (nextX === 0 || lastY === 0 || nextX === 500 || lastY === 500) {
-    paintWall(nextX, nextY, width, height, 'rgb(100,150,100)')
+  const width = 20
+  const height = 20
+  if (nextX === 0 || lastY === 0 || nextX === 480 || lastY === 480) {
+    paintEnemy(nextX, nextY, width, height, 'rgb(0,0,0)')
+    wallsArray.push({
+      enemy: paintEnemy(nextX, nextY, width, height, 'rgb(0,0,0)'),
+      x: nextX,
+      y: nextY,
+      width,
+      collapsible: true
+    })
   } else {
-    paintWall(nextX, nextY, width, height, 'rgb(100,150,100)')
+    paintEnemy(nextX, nextY, width, height, 'rgb(100,150,100)')
+    wallsArray.push({
+      x: nextX,
+      y: nextY,
+      width,
+      collapsible: false
+    })
   }
-  wallsArray.push({
-    x: nextX,
-    y: nextY,
-    width,
-    height
-  })
   if (nextX < c.width) {
     lastX = nextX
     nextX = lastX + width
@@ -102,4 +154,3 @@ function renderLevel(walls, lastX = 0, nextX = 0, lastY = 0, nextY = 0) {
 // }
 
 init()
-console.table(wallsArray)
