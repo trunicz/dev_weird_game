@@ -1,16 +1,20 @@
 const c = document.getElementById('canva')
 const ctx = c.getContext('2d')
 let playerColor = 'rgba(10,10,100,0.5)'
-let isCollapse = false
+const isCollapse = false
 
 let x = 50
 let directions = []
 let y = 50
+let enemies = []
 // let playerObj = {}
-// const WallObj = {}
 const wallsArray = []
 const playerWidth = 20
 const playerHeight = 20
+
+let start = 120
+const maxY = 80
+let positionY = 20
 
 const positionPlayer = { x: 0, y: 0 }
 
@@ -53,14 +57,14 @@ function draw(ctx, c, directions) {
       }
     }
   })
-  console.log(directions)
+  // console.log(directions)
 
   if (x >= c.width - playerWidth - 20) x = c.width - playerWidth - 20
   if (x <= 20) x = 20
   if (y >= c.height - playerHeight - 20) y = c.height - playerHeight - 20
   if (y <= 20) y = 20
 
-  player(x, y, playerWidth, playerHeight)
+  player(x, y)
 
   collapse(positionPlayer.x, positionPlayer.y, playerWidth, {
     x: c.width / 2,
@@ -68,12 +72,23 @@ function draw(ctx, c, directions) {
     width: 40,
     collapsible: true
   })
+  while (enemies.length <= 10) {
+    const enemy = new Bloque(start, positionY, 20)
+    start <= 400 ? (start += 55) : (start = 120)
+    enemies.push(enemy)
+  }
+  positionY += 0.5
+  if (maxY <= positionY) {
+    positionY = 20
+  }
 
-  paintEnemy(c.width / 2, c.height / 2)
-  // console.log(x + '||' + y)
+  enemies.forEach((e) => {
+    e.paint()
+  })
+  enemies = []
 }
 
-function player(x, y, width, height) {
+function player(x, y) {
   function paintPlayer(x, y) {
     ctx.fillStyle = playerColor
     ctx.fillRect(x, y, playerWidth, playerHeight)
@@ -85,31 +100,29 @@ function player(x, y, width, height) {
 }
 
 function collapse(x, y, widthP, element) {
-  if (element.collapsible) {
-    const exw = element.x + element.width
-    const eyh = element.y + element.width
+  const exw = element.x + element.width
+  const eyh = element.y + element.width
 
-    const xw = x + widthP
-    const yw = y + widthP
+  const xw = x + widthP
+  const yw = y + widthP
 
-    if (
-      (element.x <= x && x <= exw && element.y <= y && y <= eyh) ||
-      (element.x <= x && x <= exw && element.y <= yw && yw <= eyh) ||
-      (element.x <= xw && xw <= exw && element.y <= y && y <= eyh) ||
-      (element.x <= xw && xw <= exw && element.y <= yw && yw <= eyh)
-    ) {
-      isCollapse = true
-      playerColor = 'rgba(100,10,10,0.5)'
-      return true
-    } else {
-      isCollapse = false
-      playerColor = 'rgba(10,10,100,0.5)'
-      return false
-    }
+  if (
+    (element.x <= x && x <= exw && element.y <= y && y <= eyh) ||
+    (element.x <= x && x <= exw && element.y <= yw && yw <= eyh) ||
+    (element.x <= xw && xw <= exw && element.y <= y && y <= eyh) ||
+    (element.x <= xw && xw <= exw && element.y <= yw && yw <= eyh)
+  ) {
+    // isCollapse = true
+    playerColor = 'rgba(100,10,10,0.5)'
+    return true
+  } else {
+    // isCollapse = false
+    playerColor = 'rgba(10,10,100,0.5)'
+    return false
   }
 }
 
-function paintEnemy(
+function paintWall(
   x,
   y,
   width = playerWidth * 2,
@@ -137,7 +150,7 @@ function renderLevel(walls, lastX = 0, nextX = 0, lastY = 0, nextY = 0) {
     (nextX <= 350 && nextY === 300) ||
     (nextX >= 120 && nextY === 400)
   ) {
-    enemy = paintEnemy(nextX, nextY, width, height, 'rgba(55,79,100,0.5)')
+    enemy = paintWall(nextX, nextY, width, height, 'rgba(55,79,100,0.5)')
     wallsArray.push({
       enemy,
       x: nextX,
@@ -146,7 +159,7 @@ function renderLevel(walls, lastX = 0, nextX = 0, lastY = 0, nextY = 0) {
       collapsible: true
     })
   } else {
-    enemy = paintEnemy(nextX, nextY, width, height, 'rgb(100,150,100)')
+    enemy = paintWall(nextX, nextY, width, height, 'rgb(100,150,100)')
     wallsArray.push({
       x: nextX,
       y: nextY,
@@ -162,13 +175,25 @@ function renderLevel(walls, lastX = 0, nextX = 0, lastY = 0, nextY = 0) {
     nextY = lastY + height
     lastY = nextY
   }
-  console.log()
   if (nextX <= c.width && nextY <= c.height) {
     renderLevel(walls, nextX, nextX, lastY, lastY)
   }
 }
-// function random(max) {
-//   return Math.floor(Math.random() * max) + 1
-// }
+function random(max) {
+  return Math.floor(Math.random() * max) + 1
+}
+
+class Bloque {
+  constructor(x, y, width) {
+    this.x = x
+    this.y = y
+    this.width = width
+  }
+
+  paint() {
+    ctx.fillStyle = 'rgba(55,79,100)'
+    ctx.fillRect(this.x, this.y, this.width, this.width)
+  }
+}
 
 init()
