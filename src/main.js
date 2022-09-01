@@ -3,9 +3,9 @@ const ctx = c.getContext('2d')
 let playerColor = 'rgba(10,10,100,0.5)'
 let isCollapse = false
 
-let x = 100
+let x = 50
 let directions = []
-let y = 100
+let y = 50
 // let playerObj = {}
 // const WallObj = {}
 const wallsArray = []
@@ -35,7 +35,7 @@ function run(ctx, c) {
 }
 
 function draw(ctx, c, directions) {
-  // ctx.fillStyle = '#000'
+  // ctx.fillStyle = 'rgb(100,150,100)'
   // ctx.fillRect(x, y, c.width, c.height)
   renderLevel(10)
 
@@ -125,17 +125,28 @@ function paintEnemy(
 function renderLevel(walls, lastX = 0, nextX = 0, lastY = 0, nextY = 0) {
   const width = 20
   const height = 20
-  if (nextX === 0 || lastY === 0 || nextX === 480 || lastY === 480) {
-    paintEnemy(nextX, nextY, width, height, 'rgb(0,0,0)')
+  let enemy
+  if (
+    nextX === 0 ||
+    lastY === 0 ||
+    nextX === 480 ||
+    nextY === 480 ||
+    nextY === 150 ||
+    (nextX <= 350 && nextY === 100) ||
+    (nextX >= 120 && nextY === 200) ||
+    (nextX <= 350 && nextY === 300) ||
+    (nextX >= 120 && nextY === 400)
+  ) {
+    enemy = paintEnemy(nextX, nextY, width, height, 'rgba(55,79,100,0.5)')
     wallsArray.push({
-      enemy: paintEnemy(nextX, nextY, width, height, 'rgb(0,0,0)'),
+      enemy,
       x: nextX,
       y: nextY,
       width,
       collapsible: true
     })
   } else {
-    paintEnemy(nextX, nextY, width, height, 'rgb(100,150,100)')
+    enemy = paintEnemy(nextX, nextY, width, height, 'rgb(100,150,100)')
     wallsArray.push({
       x: nextX,
       y: nextY,
