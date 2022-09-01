@@ -41,12 +41,19 @@ function draw(ctx, c, directions) {
 
   directions.forEach((direction) => {
     if (!isCollapse) {
-      if (direction === 'w') y -= 5
-      if (direction === 's') y += 5
-      if (direction === 'a') x -= 5
-      if (direction === 'd') x += 5
+      if (direction === 'w') y -= 2
+      if (direction === 's') y += 2
+      if (direction === 'a') x -= 2
+      if (direction === 'd') x += 2
+      if (direction === 'k') {
+        if (directions[directions.length - 2] === 'w') y -= 10
+        if (directions[directions.length - 2] === 's') y += 10
+        if (directions[directions.length - 2] === 'a') x -= 10
+        if (directions[directions.length - 2] === 'd') x += 10
+      }
     }
   })
+  console.log(directions)
 
   if (x >= c.width - playerWidth - 20) x = c.width - playerWidth - 20
   if (x <= 20) x = 20
