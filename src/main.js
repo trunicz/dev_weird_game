@@ -1,22 +1,41 @@
 const c = document.getElementById('canva')
 const ctx = c.getContext('2d')
 let playerColor = 'rgba(10,10,100,0.5)'
-const isCollapse = false
+let isCollapse = false
+let winblock
 
-let x = 50
 let directions = []
-let y = 50
 let enemies = []
+let enemies2 = []
+let enemies3 = []
+let enemies4 = []
+let enemies5 = []
+let enemies6 = []
 // let playerObj = {}
 const wallsArray = []
 const playerWidth = 20
 const playerHeight = 20
 
 let start = 120
-const maxY = 80
-let positionY = 20
+const maxY = 100
+let positionY = 0
 
-const positionPlayer = { x: 0, y: 0 }
+const maxY2 = 100
+let positionY2 = 200
+
+const maxY3 = 300
+let positionY3 = 200
+
+const maxY4 = 300
+let positionY4 = 400
+
+const maxY5 = 400
+let positionY5 = 500
+
+const maxY6 = 480
+let positionY6 = 420
+
+const positionPlayer = { x: 50, y: 450 }
 
 function init(x, y, width, height) {
   run(ctx, c)
@@ -42,56 +61,234 @@ function draw(ctx, c, directions) {
   // ctx.fillStyle = 'rgb(100,150,100)'
   // ctx.fillRect(x, y, c.width, c.height)
   renderLevel(10)
+  enemies = []
+  enemies2 = []
+  enemies3 = []
+  enemies4 = []
+  enemies5 = []
+  enemies6 = []
+  winblock = new Bloque(420, 420, 60, 'rgba(212, 175, 55,0.8)')
+  winblock.paint()
+
+  if (collapse(positionPlayer.x, positionPlayer.y, 20, winblock.getObject())) {
+    isCollapse = true
+  }
 
   directions.forEach((direction) => {
     if (!isCollapse) {
-      if (direction === 'w') y -= 2
-      if (direction === 's') y += 2
-      if (direction === 'a') x -= 2
-      if (direction === 'd') x += 2
+      if (direction === 'w') positionPlayer.y -= 2
+      if (direction === 's') positionPlayer.y += 2
+      if (direction === 'a') positionPlayer.x -= 2
+      if (direction === 'd') positionPlayer.x += 2
       if (direction === 'k') {
-        if (directions[directions.length - 2] === 'w') y -= 10
-        if (directions[directions.length - 2] === 's') y += 10
-        if (directions[directions.length - 2] === 'a') x -= 10
-        if (directions[directions.length - 2] === 'd') x += 10
+        if (directions[directions.length - 2] === 'w') positionPlayer.y -= 10
+        if (directions[directions.length - 2] === 's') positionPlayer.y += 10
+        if (directions[directions.length - 2] === 'a') positionPlayer.x -= 10
+        if (directions[directions.length - 2] === 'd') positionPlayer.x += 10
       }
     }
   })
   // console.log(directions)
 
-  if (x >= c.width - playerWidth - 20) x = c.width - playerWidth - 20
-  if (x <= 20) x = 20
-  if (y >= c.height - playerHeight - 20) y = c.height - playerHeight - 20
-  if (y <= 20) y = 20
+  if (positionPlayer.x >= c.width - playerWidth - 20) {
+    positionPlayer.x = c.width - playerWidth - 20
+  }
+  if (positionPlayer.x <= 20) positionPlayer.x = 20
+  if (positionPlayer.y >= c.height - playerHeight - 20) {
+    positionPlayer.y = c.height - playerHeight - 20
+  }
+  if (positionPlayer.y <= 20) positionPlayer.y = 20
 
-  player(x, y)
+  if (
+    positionPlayer.y >= 80 &&
+    positionPlayer.y <= 100 &&
+    positionPlayer.x < 360
+  ) {
+    positionPlayer.y = 80
+  }
+  if (
+    positionPlayer.y <= 120 &&
+    positionPlayer.y >= 100 &&
+    positionPlayer.x < 360
+  ) {
+    positionPlayer.y = 120
+  }
+  if (
+    positionPlayer.y >= 80 &&
+    positionPlayer.y <= 100 &&
+    positionPlayer.x < 360
+  ) {
+    positionPlayer.y = 80
+  }
+  if (
+    positionPlayer.y <= 120 &&
+    positionPlayer.y >= 100 &&
+    positionPlayer.x < 360
+  ) {
+    positionPlayer.y = 120
+  }
+  if (
+    positionPlayer.y >= 180 &&
+    positionPlayer.y <= 200 &&
+    positionPlayer.x > 100
+  ) {
+    positionPlayer.y = 180
+  }
+  if (
+    positionPlayer.y <= 220 &&
+    positionPlayer.y >= 200 &&
+    positionPlayer.x > 100
+  ) {
+    positionPlayer.y = 220
+  }
+  if (
+    positionPlayer.y >= 280 &&
+    positionPlayer.y <= 300 &&
+    positionPlayer.x < 360
+  ) {
+    positionPlayer.y = 280
+  }
+  if (
+    positionPlayer.y <= 320 &&
+    positionPlayer.y >= 300 &&
+    positionPlayer.x < 360
+  ) {
+    positionPlayer.y = 320
+  }
+  if (
+    positionPlayer.y >= 380 &&
+    positionPlayer.y <= 400 &&
+    positionPlayer.x > 100
+  ) {
+    positionPlayer.y = 380
+  }
+  if (
+    positionPlayer.y <= 420 &&
+    positionPlayer.y >= 400 &&
+    positionPlayer.x > 100
+  ) {
+    positionPlayer.y = 420
+  }
+  console.log(positionPlayer.x, positionPlayer.y)
 
-  collapse(positionPlayer.x, positionPlayer.y, playerWidth, {
-    x: c.width / 2,
-    y: c.height / 2,
-    width: 40,
-    collapsible: true
-  })
-  while (enemies.length <= 10) {
+  player(positionPlayer.x, positionPlayer.y)
+
+  while (enemies.length <= 5) {
     const enemy = new Bloque(start, positionY, 20)
-    start <= 400 ? (start += 55) : (start = 120)
+    enemy.paint()
     enemies.push(enemy)
-  }
-  positionY += 0.5
-  if (maxY <= positionY) {
-    positionY = 20
+    if (start < 300) {
+      start += 55
+    } else {
+      start = 120
+    }
+    positionY += 0.1 + random(0.3)
+    if (maxY <= positionY) {
+      positionY = 0
+    }
+    if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
+      positionPlayer.x = 50
+      positionPlayer.y = 50
+    }
   }
 
-  enemies.forEach((e) => {
-    e.paint()
-  })
-  enemies = []
+  while (enemies2.length <= 5) {
+    const enemy = new Bloque(start, positionY2, 20)
+    enemy.paint()
+    enemies2.push(enemy)
+    if (start < 300) {
+      start += 55
+    } else {
+      start = 120
+    }
+    positionY2 -= 0.2
+    if (maxY2 >= positionY2) {
+      positionY2 = 200
+    }
+    if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
+      positionPlayer.x = 50
+      positionPlayer.y = 50
+    }
+  }
+
+  while (enemies3.length <= 5) {
+    const enemy = new Bloque(start, positionY3, 20)
+    enemy.paint()
+    enemies3.push(enemy)
+    if (start < 300) {
+      start += 55
+    } else {
+      start = 120
+    }
+    positionY3 += 0.1 + random(0.5)
+    if (maxY3 <= positionY3) {
+      positionY3 = 200
+    }
+    if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
+      positionPlayer.x = 50
+      positionPlayer.y = 50
+    }
+  }
+  while (enemies4.length <= 5) {
+    const enemy = new Bloque(start, positionY4, 20)
+    enemy.paint()
+    enemies4.push(enemy)
+    if (start < 300) {
+      start += 55
+    } else {
+      start = 120
+    }
+    positionY4 -= 0.1
+    if (maxY4 >= positionY4) {
+      positionY4 = 400
+    }
+    if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
+      positionPlayer.x = 50
+      positionPlayer.y = 50
+    }
+  }
+  while (enemies5.length <= 5) {
+    const enemy = new Bloque(start, positionY5, 20)
+    enemy.paint()
+    enemies5.push(enemy)
+    if (start < 300) {
+      start += 55
+    } else {
+      start = 120
+    }
+    positionY5 += 0.1
+    if (maxY5 <= positionY5) {
+      positionY5 = 300
+    }
+    if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
+      positionPlayer.x = 50
+      positionPlayer.y = 50
+    }
+  }
+  while (enemies6.length <= 5) {
+    const enemy = new Bloque(start, positionY6, 20)
+    enemy.paint()
+    enemies6.push(enemy)
+    if (start < 300) {
+      start += 55
+    } else {
+      start = 120
+    }
+    positionY6 += 0.1 + random(0.3)
+    if (maxY6 <= positionY6) {
+      positionY6 = 400
+    }
+    if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
+      positionPlayer.x = 50
+      positionPlayer.y = 50
+    }
+  }
 }
 
 function player(x, y) {
   function paintPlayer(x, y) {
     ctx.fillStyle = playerColor
-    ctx.fillRect(x, y, playerWidth, playerHeight)
+    ctx.fillRect(positionPlayer.x, positionPlayer.y, playerWidth, playerHeight)
     positionPlayer.x = x
     positionPlayer.y = y
   }
@@ -180,18 +377,23 @@ function renderLevel(walls, lastX = 0, nextX = 0, lastY = 0, nextY = 0) {
   }
 }
 function random(max) {
-  return Math.floor(Math.random() * max) + 1
+  return Math.random() * max
 }
 
 class Bloque {
-  constructor(x, y, width) {
+  constructor(x, y, width, color = 'rgba(55,79,100)') {
     this.x = x
     this.y = y
     this.width = width
+    this.color = color
+  }
+
+  getObject() {
+    return { x: this.x, y: this.y, width: this.width }
   }
 
   paint() {
-    ctx.fillStyle = 'rgba(55,79,100)'
+    ctx.fillStyle = this.color
     ctx.fillRect(this.x, this.y, this.width, this.width)
   }
 }
