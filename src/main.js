@@ -1,10 +1,18 @@
 const c = document.getElementById('canva')
 const ctx = c.getContext('2d')
+
 let playerColor = 'rgba(10,10,100,0.5)'
 let isCollapse = false
 let winblock
-
 let win = false
+const audio = new Audio('src/sounds/8-Bit-Adventure.wav')
+const audioFail = new Audio('src/sounds/boom11.wav')
+const audiowin = new Audio('src/sounds/8-bits-f1.wav')
+const audiopass = new Audio('src/sounds/sound1.wav')
+audio.volume = 0.1
+audioFail.volume = 0.1
+audiowin.volume = 0.3
+audiopass.volume = 0.1
 
 let directions = []
 let enemies = []
@@ -40,6 +48,7 @@ let positionY6 = 420
 const positionPlayer = { x: 380, y: 450 }
 
 function init(x, y, width, height) {
+  audio.play()
   run(ctx, c)
   window.requestAnimationFrame(init)
 }
@@ -195,6 +204,7 @@ function draw(ctx, c, directions) {
       if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
         positionPlayer.x = 50
         positionPlayer.y = 50
+        audioFail.play()
       }
     }
 
@@ -214,6 +224,7 @@ function draw(ctx, c, directions) {
       if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
         positionPlayer.x = 50
         positionPlayer.y = 50
+        audioFail.play()
       }
     }
 
@@ -233,6 +244,7 @@ function draw(ctx, c, directions) {
       if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
         positionPlayer.x = 50
         positionPlayer.y = 50
+        audioFail.play()
       }
     }
     while (enemies4.length <= 5) {
@@ -251,6 +263,7 @@ function draw(ctx, c, directions) {
       if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
         positionPlayer.x = 50
         positionPlayer.y = 50
+        audioFail.play()
       }
     }
     while (enemies5.length <= 5) {
@@ -269,6 +282,7 @@ function draw(ctx, c, directions) {
       if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
         positionPlayer.x = 50
         positionPlayer.y = 50
+        audioFail.play()
       }
     }
     while (enemies6.length <= 5) {
@@ -287,9 +301,12 @@ function draw(ctx, c, directions) {
       if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
         positionPlayer.x = 50
         positionPlayer.y = 50
+        audioFail.play()
       }
     }
   } else {
+    audiowin.play()
+    audio.pause()
     ctx.fillStyle = 'rgb(0,0,0)'
     ctx.fillRect(0, 0, c.width, c.height)
     const texto = 'Ganaste!!!' // texto de prueba

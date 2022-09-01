@@ -13,5 +13,11 @@ body{
   width: 550px;
 }
 #canva{
+  font-family:'Press Start2P Regular','Nunito';
   background-color: #000;
+}
+.list-btn{
+  list-style: none;
+  padding: 0;
+
 }
