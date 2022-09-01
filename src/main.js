@@ -4,6 +4,8 @@ let playerColor = 'rgba(10,10,100,0.5)'
 let isCollapse = false
 let winblock
 
+let win = false
+
 let directions = []
 let enemies = []
 let enemies2 = []
@@ -35,7 +37,7 @@ let positionY5 = 500
 const maxY6 = 480
 let positionY6 = 420
 
-const positionPlayer = { x: 50, y: 450 }
+const positionPlayer = { x: 380, y: 450 }
 
 function init(x, y, width, height) {
   run(ctx, c)
@@ -58,230 +60,244 @@ function run(ctx, c) {
 }
 
 function draw(ctx, c, directions) {
-  // ctx.fillStyle = 'rgb(100,150,100)'
-  // ctx.fillRect(x, y, c.width, c.height)
-  renderLevel(10)
-  enemies = []
-  enemies2 = []
-  enemies3 = []
-  enemies4 = []
-  enemies5 = []
-  enemies6 = []
-  winblock = new Bloque(420, 420, 60, 'rgba(212, 175, 55,0.8)')
-  winblock.paint()
+  if (!win) {
+    // ctx.fillStyle = 'rgb(100,150,100)'
+    // ctx.fillRect(x, y, c.width, c.height)
+    renderLevel(10)
+    enemies = []
+    enemies2 = []
+    enemies3 = []
+    enemies4 = []
+    enemies5 = []
+    enemies6 = []
+    winblock = new Bloque(420, 420, 60, 'rgba(212, 175, 55,0.8)')
+    winblock.paint()
 
-  if (collapse(positionPlayer.x, positionPlayer.y, 20, winblock.getObject())) {
-    isCollapse = true
-  }
+    if (
+      collapse(positionPlayer.x, positionPlayer.y, 20, winblock.getObject())
+    ) {
+      isCollapse = true
+      win = true
+    }
 
-  directions.forEach((direction) => {
-    if (!isCollapse) {
-      if (direction === 'w') positionPlayer.y -= 2
-      if (direction === 's') positionPlayer.y += 2
-      if (direction === 'a') positionPlayer.x -= 2
-      if (direction === 'd') positionPlayer.x += 2
-      if (direction === 'k') {
-        if (directions[directions.length - 2] === 'w') positionPlayer.y -= 10
-        if (directions[directions.length - 2] === 's') positionPlayer.y += 10
-        if (directions[directions.length - 2] === 'a') positionPlayer.x -= 10
-        if (directions[directions.length - 2] === 'd') positionPlayer.x += 10
+    directions.forEach((direction) => {
+      if (!isCollapse) {
+        if (direction === 'w') positionPlayer.y -= 2
+        if (direction === 's') positionPlayer.y += 2
+        if (direction === 'a') positionPlayer.x -= 2
+        if (direction === 'd') positionPlayer.x += 2
+        if (direction === 'k') {
+          if (directions[directions.length - 2] === 'w') positionPlayer.y -= 10
+          if (directions[directions.length - 2] === 's') positionPlayer.y += 10
+          if (directions[directions.length - 2] === 'a') positionPlayer.x -= 10
+          if (directions[directions.length - 2] === 'd') positionPlayer.x += 10
+        }
+      }
+    })
+    // console.log(directions)
+
+    if (positionPlayer.x >= c.width - playerWidth - 20) {
+      positionPlayer.x = c.width - playerWidth - 20
+    }
+    if (positionPlayer.x <= 20) positionPlayer.x = 20
+    if (positionPlayer.y >= c.height - playerHeight - 20) {
+      positionPlayer.y = c.height - playerHeight - 20
+    }
+    if (positionPlayer.y <= 20) positionPlayer.y = 20
+
+    if (
+      positionPlayer.y >= 80 &&
+      positionPlayer.y <= 100 &&
+      positionPlayer.x < 360
+    ) {
+      positionPlayer.y = 80
+    }
+    if (
+      positionPlayer.y <= 120 &&
+      positionPlayer.y >= 100 &&
+      positionPlayer.x < 360
+    ) {
+      positionPlayer.y = 120
+    }
+    if (
+      positionPlayer.y >= 80 &&
+      positionPlayer.y <= 100 &&
+      positionPlayer.x < 360
+    ) {
+      positionPlayer.y = 80
+    }
+    if (
+      positionPlayer.y <= 120 &&
+      positionPlayer.y >= 100 &&
+      positionPlayer.x < 360
+    ) {
+      positionPlayer.y = 120
+    }
+    if (
+      positionPlayer.y >= 180 &&
+      positionPlayer.y <= 200 &&
+      positionPlayer.x > 100
+    ) {
+      positionPlayer.y = 180
+    }
+    if (
+      positionPlayer.y <= 220 &&
+      positionPlayer.y >= 200 &&
+      positionPlayer.x > 100
+    ) {
+      positionPlayer.y = 220
+    }
+    if (
+      positionPlayer.y >= 280 &&
+      positionPlayer.y <= 300 &&
+      positionPlayer.x < 360
+    ) {
+      positionPlayer.y = 280
+    }
+    if (
+      positionPlayer.y <= 320 &&
+      positionPlayer.y >= 300 &&
+      positionPlayer.x < 360
+    ) {
+      positionPlayer.y = 320
+    }
+    if (
+      positionPlayer.y >= 380 &&
+      positionPlayer.y <= 400 &&
+      positionPlayer.x > 100
+    ) {
+      positionPlayer.y = 380
+    }
+    if (
+      positionPlayer.y <= 420 &&
+      positionPlayer.y >= 400 &&
+      positionPlayer.x > 100
+    ) {
+      positionPlayer.y = 420
+    }
+    console.log(positionPlayer.x, positionPlayer.y)
+
+    player(positionPlayer.x, positionPlayer.y)
+
+    while (enemies.length <= 5) {
+      const enemy = new Bloque(start, positionY, 20)
+      enemy.paint()
+      enemies.push(enemy)
+      if (start < 300) {
+        start += 55
+      } else {
+        start = 120
+      }
+      positionY += 0.1 + random(0.3)
+      if (maxY <= positionY) {
+        positionY = 0
+      }
+      if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
+        positionPlayer.x = 50
+        positionPlayer.y = 50
       }
     }
-  })
-  // console.log(directions)
 
-  if (positionPlayer.x >= c.width - playerWidth - 20) {
-    positionPlayer.x = c.width - playerWidth - 20
-  }
-  if (positionPlayer.x <= 20) positionPlayer.x = 20
-  if (positionPlayer.y >= c.height - playerHeight - 20) {
-    positionPlayer.y = c.height - playerHeight - 20
-  }
-  if (positionPlayer.y <= 20) positionPlayer.y = 20
+    while (enemies2.length <= 5) {
+      const enemy = new Bloque(start, positionY2, 20)
+      enemy.paint()
+      enemies2.push(enemy)
+      if (start < 300) {
+        start += 55
+      } else {
+        start = 120
+      }
+      positionY2 -= 0.2
+      if (maxY2 >= positionY2) {
+        positionY2 = 200
+      }
+      if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
+        positionPlayer.x = 50
+        positionPlayer.y = 50
+      }
+    }
 
-  if (
-    positionPlayer.y >= 80 &&
-    positionPlayer.y <= 100 &&
-    positionPlayer.x < 360
-  ) {
-    positionPlayer.y = 80
-  }
-  if (
-    positionPlayer.y <= 120 &&
-    positionPlayer.y >= 100 &&
-    positionPlayer.x < 360
-  ) {
-    positionPlayer.y = 120
-  }
-  if (
-    positionPlayer.y >= 80 &&
-    positionPlayer.y <= 100 &&
-    positionPlayer.x < 360
-  ) {
-    positionPlayer.y = 80
-  }
-  if (
-    positionPlayer.y <= 120 &&
-    positionPlayer.y >= 100 &&
-    positionPlayer.x < 360
-  ) {
-    positionPlayer.y = 120
-  }
-  if (
-    positionPlayer.y >= 180 &&
-    positionPlayer.y <= 200 &&
-    positionPlayer.x > 100
-  ) {
-    positionPlayer.y = 180
-  }
-  if (
-    positionPlayer.y <= 220 &&
-    positionPlayer.y >= 200 &&
-    positionPlayer.x > 100
-  ) {
-    positionPlayer.y = 220
-  }
-  if (
-    positionPlayer.y >= 280 &&
-    positionPlayer.y <= 300 &&
-    positionPlayer.x < 360
-  ) {
-    positionPlayer.y = 280
-  }
-  if (
-    positionPlayer.y <= 320 &&
-    positionPlayer.y >= 300 &&
-    positionPlayer.x < 360
-  ) {
-    positionPlayer.y = 320
-  }
-  if (
-    positionPlayer.y >= 380 &&
-    positionPlayer.y <= 400 &&
-    positionPlayer.x > 100
-  ) {
-    positionPlayer.y = 380
-  }
-  if (
-    positionPlayer.y <= 420 &&
-    positionPlayer.y >= 400 &&
-    positionPlayer.x > 100
-  ) {
-    positionPlayer.y = 420
-  }
-  console.log(positionPlayer.x, positionPlayer.y)
-
-  player(positionPlayer.x, positionPlayer.y)
-
-  while (enemies.length <= 5) {
-    const enemy = new Bloque(start, positionY, 20)
-    enemy.paint()
-    enemies.push(enemy)
-    if (start < 300) {
-      start += 55
-    } else {
-      start = 120
+    while (enemies3.length <= 5) {
+      const enemy = new Bloque(start, positionY3, 20)
+      enemy.paint()
+      enemies3.push(enemy)
+      if (start < 300) {
+        start += 55
+      } else {
+        start = 120
+      }
+      positionY3 += 0.1 + random(0.5)
+      if (maxY3 <= positionY3) {
+        positionY3 = 200
+      }
+      if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
+        positionPlayer.x = 50
+        positionPlayer.y = 50
+      }
     }
-    positionY += 0.1 + random(0.3)
-    if (maxY <= positionY) {
-      positionY = 0
+    while (enemies4.length <= 5) {
+      const enemy = new Bloque(start, positionY4, 20)
+      enemy.paint()
+      enemies4.push(enemy)
+      if (start < 300) {
+        start += 55
+      } else {
+        start = 120
+      }
+      positionY4 -= 0.1
+      if (maxY4 >= positionY4) {
+        positionY4 = 400
+      }
+      if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
+        positionPlayer.x = 50
+        positionPlayer.y = 50
+      }
     }
-    if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
-      positionPlayer.x = 50
-      positionPlayer.y = 50
+    while (enemies5.length <= 5) {
+      const enemy = new Bloque(start, positionY5, 20)
+      enemy.paint()
+      enemies5.push(enemy)
+      if (start < 300) {
+        start += 55
+      } else {
+        start = 120
+      }
+      positionY5 += 0.1
+      if (maxY5 <= positionY5) {
+        positionY5 = 300
+      }
+      if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
+        positionPlayer.x = 50
+        positionPlayer.y = 50
+      }
     }
-  }
-
-  while (enemies2.length <= 5) {
-    const enemy = new Bloque(start, positionY2, 20)
-    enemy.paint()
-    enemies2.push(enemy)
-    if (start < 300) {
-      start += 55
-    } else {
-      start = 120
+    while (enemies6.length <= 5) {
+      const enemy = new Bloque(start, positionY6, 20)
+      enemy.paint()
+      enemies6.push(enemy)
+      if (start < 300) {
+        start += 55
+      } else {
+        start = 120
+      }
+      positionY6 += 0.1 + random(0.3)
+      if (maxY6 <= positionY6) {
+        positionY6 = 400
+      }
+      if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
+        positionPlayer.x = 50
+        positionPlayer.y = 50
+      }
     }
-    positionY2 -= 0.2
-    if (maxY2 >= positionY2) {
-      positionY2 = 200
-    }
-    if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
-      positionPlayer.x = 50
-      positionPlayer.y = 50
-    }
-  }
-
-  while (enemies3.length <= 5) {
-    const enemy = new Bloque(start, positionY3, 20)
-    enemy.paint()
-    enemies3.push(enemy)
-    if (start < 300) {
-      start += 55
-    } else {
-      start = 120
-    }
-    positionY3 += 0.1 + random(0.5)
-    if (maxY3 <= positionY3) {
-      positionY3 = 200
-    }
-    if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
-      positionPlayer.x = 50
-      positionPlayer.y = 50
-    }
-  }
-  while (enemies4.length <= 5) {
-    const enemy = new Bloque(start, positionY4, 20)
-    enemy.paint()
-    enemies4.push(enemy)
-    if (start < 300) {
-      start += 55
-    } else {
-      start = 120
-    }
-    positionY4 -= 0.1
-    if (maxY4 >= positionY4) {
-      positionY4 = 400
-    }
-    if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
-      positionPlayer.x = 50
-      positionPlayer.y = 50
-    }
-  }
-  while (enemies5.length <= 5) {
-    const enemy = new Bloque(start, positionY5, 20)
-    enemy.paint()
-    enemies5.push(enemy)
-    if (start < 300) {
-      start += 55
-    } else {
-      start = 120
-    }
-    positionY5 += 0.1
-    if (maxY5 <= positionY5) {
-      positionY5 = 300
-    }
-    if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
-      positionPlayer.x = 50
-      positionPlayer.y = 50
-    }
-  }
-  while (enemies6.length <= 5) {
-    const enemy = new Bloque(start, positionY6, 20)
-    enemy.paint()
-    enemies6.push(enemy)
-    if (start < 300) {
-      start += 55
-    } else {
-      start = 120
-    }
-    positionY6 += 0.1 + random(0.3)
-    if (maxY6 <= positionY6) {
-      positionY6 = 400
-    }
-    if (collapse(positionPlayer.x, positionPlayer.y, 20, enemy.getObject())) {
-      positionPlayer.x = 50
-      positionPlayer.y = 50
-    }
+  } else {
+    ctx.fillStyle = 'rgb(0,0,0)'
+    ctx.fillRect(0, 0, c.width, c.height)
+    const texto = 'Ganaste!!!' // texto de prueba
+    ctx.beginPath() // iniciar ruta
+    ctx.strokeStyle = 'white' // color externo
+    ctx.fillStyle = 'white' // color de relleno
+    ctx.font = 'bold 30px Press Start2P Regular' // estilo de texto// texto con los dos métodos
+    ctx.fillText(texto, c.width / 2 - 60, c.width / 2 - 30)
   }
 }
 
