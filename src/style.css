@@ -1,10 +1,16 @@
+
+
 body{
   background-color: #333;
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-family:'Press Start2P Regular','Nunito';
 }
 .canva_container{
-  text-align: center;
-  color: white;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+.canva_container > div{
+  width: 550px;
 }
 #canva{
   background-color: #000;
