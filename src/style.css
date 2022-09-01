@@ -10,7 +10,8 @@ body{
   padding: 20px;
 }
 .canva_container > div{
-  width: 550px;
+  text-align: center;
+  width: 100%;
 }
 #canva{
   font-family:'Press Start2P Regular','Nunito';
@@ -18,6 +19,23 @@ body{
 }
 .list-btn{
   list-style: none;
-  padding: 0;
+}
+.list-btn:first-child{
+  display: flex;
+  flex-direction: column;
 
+  display: flex;
+}
+.list-btn button{
+  width: 100%;
+  margin: auto;
+}
+.flex{
+  display: flex;
+}
+
+@media (max-width: 600px) {
+  .list-btn{
+    padding: 0 650px;
+  }
 }
