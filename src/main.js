@@ -5,13 +5,16 @@ let playerColor = 'rgba(10,10,100,0.5)'
 let isCollapse = false
 let winblock
 let win = false
+let perdiste = false
 const audio = new Audio('src/sounds/8-Bit-Adventure.wav')
 const audioFail = new Audio('src/sounds/boom11.wav')
 const audiowin = new Audio('src/sounds/8-bits-f1.wav')
-const audiopass = new Audio('src/sounds/sound1.wav')
+const audiopass = new Audio('src/sounds/sound5.wav')
+const audioasd = new Audio('src/sounds/y2mate.com - Sadness and Sorrow8 Bits.mp3')
 audio.volume = 0.1
 audioFail.volume = 0.1
 audiowin.volume = 0.3
+audioasd.volumen = 0.5
 audiopass.volume = 0.1
 
 let directions = []
@@ -45,7 +48,7 @@ let positionY5 = 500
 const maxY6 = 480
 let positionY6 = 420
 
-const positionPlayer = { x: 380, y: 450 }
+const positionPlayer = { x: 50, y: 50 }
 
 function init(x, y, width, height) {
   audio.play()
@@ -67,9 +70,26 @@ function run(ctx, c) {
   })
   draw(ctx, c, directions)
 }
+let minutos = 1
+let segundos = 0
+setInterval(() => {
+  if (minutos !== -1) {
+    if (segundos > 0) {
+      segundos--
+    } else if (minutos !== 0) {
+      segundos = 59
+      minutos--
+    }
+  }
+  if (minutos === 0 && segundos === 0) {
+    perdiste = true
+  }
+  const timerhtml = document.querySelector('#timer')
+  timerhtml.innerHTML = `${minutos}:${segundos > 9 ? segundos : '0' + segundos} `
+}, 1000)
 
 function draw(ctx, c, directions) {
-  if (!win) {
+  if (!win && !perdiste) {
     // ctx.fillStyle = 'rgb(100,150,100)'
     // ctx.fillRect(x, y, c.width, c.height)
     renderLevel(10)
@@ -96,6 +116,7 @@ function draw(ctx, c, directions) {
         if (direction === 'a') positionPlayer.x -= 2
         if (direction === 'd') positionPlayer.x += 2
         if (direction === 'k') {
+          audiopass.play()
           if (directions[directions.length - 2] === 'w') positionPlayer.y -= 10
           if (directions[directions.length - 2] === 's') positionPlayer.y += 10
           if (directions[directions.length - 2] === 'a') positionPlayer.x -= 10
@@ -184,7 +205,7 @@ function draw(ctx, c, directions) {
     ) {
       positionPlayer.y = 420
     }
-    console.log(positionPlayer.x, positionPlayer.y)
+    // console.log(positionPlayer.x, positionPlayer.y)
 
     player(positionPlayer.x, positionPlayer.y)
 
@@ -237,7 +258,7 @@ function draw(ctx, c, directions) {
       } else {
         start = 120
       }
-      positionY3 += 0.1 + random(0.5)
+      positionY3 += 0.1 + random(0.1)
       if (maxY3 <= positionY3) {
         positionY3 = 200
       }
@@ -256,7 +277,7 @@ function draw(ctx, c, directions) {
       } else {
         start = 120
       }
-      positionY4 -= 0.1
+      positionY4 -= 0.05
       if (maxY4 >= positionY4) {
         positionY4 = 400
       }
@@ -304,7 +325,7 @@ function draw(ctx, c, directions) {
         audioFail.play()
       }
     }
-  } else {
+  } else if (win) {
     audiowin.play()
     audio.pause()
     ctx.fillStyle = 'rgb(0,0,0)'
@@ -315,6 +336,17 @@ function draw(ctx, c, directions) {
     ctx.fillStyle = 'white' // color de relleno
     ctx.font = 'bold 30px Press Start2P Regular' // estilo de texto// texto con los dos métodos
     ctx.fillText(texto, c.width / 2 - 60, c.width / 2 - 30)
+  } else if (perdiste) {
+    audioasd.play()
+    audio.pause()
+    ctx.fillStyle = 'rgb(0,0,0)'
+    ctx.fillRect(0, 0, c.width, c.height)
+    const texto = 'PERDEDOR!!!' // texto de prueba
+    ctx.beginPath() // iniciar ruta
+    ctx.strokeStyle = 'white' // color externo
+    ctx.fillStyle = 'white' // color de relleno
+    ctx.font = 'bold 30px Press Start2P Regular' // estilo de texto// texto con los dos métodos
+    ctx.fillText(texto, c.width / 2 - 100, c.width / 2 - 30)
   }
 }
 

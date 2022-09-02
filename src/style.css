@@ -26,12 +26,22 @@ body{
 
   display: flex;
 }
+#timer{
+  font-size: 40px;
+}
 .list-btn button{
   width: 100%;
   margin: auto;
 }
 .flex{
   display: flex;
+}
+ul{
+  list-style: none;
+  padding: 0;
+}
+ul li{
+  font-size: 20px;
 }
 
 @media (max-width: 600px) {
